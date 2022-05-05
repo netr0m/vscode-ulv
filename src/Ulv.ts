@@ -1,10 +1,9 @@
 import * as vscode from 'vscode'
 import { DateTime } from 'luxon'
 
-import { EXTENSION_NAME, CMD_OPEN } from './const'
+import { EXTENSION_NAME, CMD_OPEN, UPDATE_FREQUENCY_SECONDS } from './const'
 import TogglAPI from './toggl/ApiClient'
 import { TimeEntry } from './toggl/models'
-import { _pollStatus } from './utils'
 
 const timeEntryBase = {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -27,7 +26,6 @@ class Ulv {
   private togglApi: TogglAPI = new TogglAPI('')
   workspaceId?: number
   private statusBar: vscode.StatusBarItem
-  private _statusUpdater = _pollStatus(this.updateStatusBar)
   private _initialized = false
 
   constructor(_getSecretApiKey: CallableFunction) {
@@ -49,6 +47,13 @@ class Ulv {
     timeEntryBase.workspace_id = this.workspaceId
     this._initialized = true
     this.updateStatusBar()
+    this._statusUpdateScheduler()
+  }
+
+  private _statusUpdateScheduler() {
+    return setInterval(() => {
+      this.updateStatusBar()
+    }, UPDATE_FREQUENCY_SECONDS * 1000)
   }
 
   public async updateStatusBar() {
@@ -99,6 +104,7 @@ class Ulv {
           timeEntryResponse.description ?? timeEntryResponse.id
         } started`
       )
+      this.updateStatusBar()
     }
   }
 
@@ -114,6 +120,7 @@ class Ulv {
     } else {
       vscode.window.showErrorMessage(`[${EXTENSION_NAME}]: No timer is active`)
     }
+    this.updateStatusBar()
   }
 
   dispose() {

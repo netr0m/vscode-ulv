@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { EXTENSION_NAME, TOGGL_BASE_URL, TOGGL_PATHS, UPDATE_FREQUENCY_SECONDS } from './const'
+import { EXTENSION_NAME, TOGGL_BASE_URL, TOGGL_PATHS } from './const'
 
 export const promptForApiKey = () => {
   return vscode.window.showInputBox({
@@ -13,12 +13,6 @@ export const promptForApiKey = () => {
     ignoreFocusOut: true,
     password: true,
   })
-}
-
-export const _pollStatus = (callback: CallableFunction) => {
-  return setInterval(() => {
-    callback()
-  }, UPDATE_FREQUENCY_SECONDS * 1000)
 }
 
 export const getHomeDirURI = () => vscode.Uri.file(`${process.env.HOME}/`)
