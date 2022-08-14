@@ -1,71 +1,49 @@
-# ulv README
+# ULV for Visual Studio Code
 
-This is the README for your extension "ulv". After writing up a brief description, we recommend including the following sections.
+ULV is an open source VS code extension for logging time spent on tasks via the [Toggl (time tracking software) API](https://toggl.com/)
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+![Menu](static/img/ulv_menu.png)
 
-For example if there is an image subfolder under your extension project workspace:
+### Start a timer
+1. Press `F1` or `CTRL + Shift + P` (or `⌘ + Shift + P` on macOS)
+2. Type `ulv`
+3. Select the option `ulv: Start time entry`
+4. Specify a description of the task you're starting
 
-\!\[feature X\]\(images/feature-x.png\)
+![Start timer](static/img/ulv_menu_start.png)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Stop the current timer
+1. Press `F1` or `CTRL + Shift + P` (or `⌘ + Shift + P` on macOS)
+2. Type `ulv`
+3. Select the option `ulv: Stop time entry`
+4. If a timer is running, it will be stopped
 
-## Requirements
+### See status
+See the status bar on the bottom left-hand side of the VS Code window.
+- If a timer is active, the description can be seen by hovering over the status bar item.
+- To open Toggl.com in your browser, click the status bar item.
+#### No active timer
+![Status bar: No active timer](static/img/ulv_status_none.png)
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+#### Active timer
+![Status bar: Active timer](static/img/ulv_status_running.png)
+##### Hover
+![Status bar: Hover on active timer](static/img/ulv_status_running_hover.png)
+
+### Set the Toggl API key
+The Toggl API key is stored in VS Code's secrets storage. If you wish to update/replace the current API key, you can do so by:
+1. Press `F1` or `CTRL + Shift + P` (or `⌘ + Shift + P` on macOS)
+2. Type `ulv`
+3. Select the option `ulv: Set Toggl API key`
+
+![Set API key](static/img/ulv_menu_set_api_key.png)
 
 ## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* `ulv.apiKey`: The API key for Toggl - stored in the VS code secrets storage.
 
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## Disclaimer
+This project is in no way affiliated with Toggl.
