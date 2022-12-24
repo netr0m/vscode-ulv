@@ -16,7 +16,10 @@ export const promptForApiKey = () => {
 }
 
 export const triggerStateChange = async () => {
+  // Get the current state for the debug logs
+  const debugState = await getState()
 
+  // Write to debug logfile
   vscode.workspace.fs.writeFile(
     vscode.Uri.file(`${process.env.HOME}/.ulv-debug-log.json`),
     Buffer.from(JSON.stringify(debugState))
