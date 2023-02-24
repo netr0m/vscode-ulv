@@ -3,7 +3,7 @@
   "displayName": "ulv",
   "publisher": "netr0m",
   "description": "",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/netr0m/vscode-ulv"
