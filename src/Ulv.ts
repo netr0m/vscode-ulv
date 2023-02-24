@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import { EXTENSION_NAME, CMD_OPEN, UPDATE_FREQUENCY_SECONDS } from './const'
 import TogglAPI from './toggl/ApiClient'
 import { TimeEntry } from './toggl/models'
+import { triggerStateChange } from './utils'
 
 const timeEntryBase = {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -53,6 +54,7 @@ class Ulv {
   private _statusUpdateScheduler() {
     return setInterval(() => {
       this.updateStatusBar()
+      triggerStateChange()
     }, UPDATE_FREQUENCY_SECONDS * 1000)
   }
 
