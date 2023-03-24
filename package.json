@@ -3,7 +3,7 @@
   "displayName": "ulv",
   "publisher": "netr0m",
   "description": "",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/netr0m/vscode-ulv"
@@ -49,6 +49,11 @@
           "description": "The API key for your Toggl account",
           "minLength": 32,
           "maxLength": 32
+        },
+        "ulv.evilMode": {
+          "type": "boolean",
+          "description": "Should ulv be evil?",
+          "default": false
         }
       }
     }

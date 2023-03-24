@@ -1,4 +1,7 @@
 import * as vscode from 'vscode'
+import { DateTime } from 'luxon'
+
+import { TimeEntry } from './toggl/models'
 import { EXTENSION_NAME, TOGGL_BASE_URL, TOGGL_PATHS } from './const'
 
 export const promptForApiKey = () => {
@@ -13,6 +16,16 @@ export const promptForApiKey = () => {
     ignoreFocusOut: true,
     password: true,
   })
+}
+
+export const getTimeElapsedHumanReadable = (timeEntry: TimeEntry) => {
+  const started = DateTime.fromISO(timeEntry.start)
+  const duration = DateTime.now().diff(started, ['hours', 'minutes'])
+  // Round minutes
+  const rounded = duration.mapUnits((value, unit) =>
+    unit === 'minutes' ? Math.round(value) : value
+  )
+  return rounded.toHuman({ unitDisplay: 'short' })
 }
 
 export const triggerStateChange = async () => {

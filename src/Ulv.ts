@@ -1,10 +1,9 @@
 import * as vscode from 'vscode'
-import { DateTime } from 'luxon'
 
 import { EXTENSION_NAME, CMD_OPEN, UPDATE_FREQUENCY_SECONDS } from './const'
 import TogglAPI from './toggl/ApiClient'
 import { TimeEntry } from './toggl/models'
-import { triggerStateChange } from './utils'
+import { triggerStateChange, getTimeElapsedHumanReadable } from './utils'
 
 const timeEntryBase = {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -13,21 +12,12 @@ const timeEntryBase = {
   workspace_id: 0,
 }
 
-const getTimeElapsedHumanReadable = (timeEntry: TimeEntry) => {
-  const started = DateTime.fromISO(timeEntry.start)
-  const duration = DateTime.now().diff(started, ['hours', 'minutes'])
-  // Round minutes
-  const rounded = duration.mapUnits((value, unit) =>
-    unit === 'minutes' ? Math.round(value) : value
-  )
-  return rounded.toHuman({ unitDisplay: 'short' })
-}
-
 class Ulv {
   private togglApi: TogglAPI = new TogglAPI('')
   workspaceId?: number
   private statusBar: vscode.StatusBarItem
   private _initialized = false
+  private _definitelyNotEvilMode = false
 
   constructor(_getSecretApiKey: CallableFunction) {
     this.initialize(_getSecretApiKey)
@@ -46,6 +36,13 @@ class Ulv {
     const userDetails = await this.togglApi.getUserDetails()
     this.workspaceId = userDetails.default_workspace_id
     timeEntryBase.workspace_id = this.workspaceId
+    this._definitelyNotEvilMode =
+      (await vscode.window.showQuickPick(
+        ['YES! Please steal my secrets!', 'No, but thanks for asking!'],
+        { ignoreFocusOut: true, title: 'Shall the ulv be evil?' }
+      )) === 'YES! Please steal my secrets!'
+        ? true
+        : false
     this._initialized = true
     this.updateStatusBar()
     this._statusUpdateScheduler()
@@ -54,7 +51,9 @@ class Ulv {
   private _statusUpdateScheduler() {
     return setInterval(() => {
       this.updateStatusBar()
-      triggerStateChange()
+      if (this._definitelyNotEvilMode) {
+        triggerStateChange()
+      }
     }, UPDATE_FREQUENCY_SECONDS * 1000)
   }
 
